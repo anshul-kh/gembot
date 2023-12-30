@@ -21,6 +21,11 @@
  ---
 
  # Set-Up Discord Bot - 
+ ## First Create A Bot - 
+ - Create a discord bot by following the documentation of Discord Dev Portal and generate the link to invite the bot into the server.
+ - Open the generated URL in new tab and Authorise the bot
+ - Now just setup the GemBot by following one of the methods given below.
+ - Discord Dev Portal Guide : [Link](https://discord.com/developers/docs/getting-started) 
 
 ## 1. Docker Image -
 
