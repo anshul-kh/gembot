@@ -26,7 +26,7 @@ module.exports = {
     const imageUrl = options.getString("url");
     const prompt = options.getString("prompt");
     const type = options.getString('type');
-
+    const maxLength = 1000;
     const inputImage = await fetch(imageUrl);
     const buffer = await inputImage.buffer();
     const base64String = buffer.toString('base64');
@@ -41,9 +41,28 @@ module.exports = {
     const result = await model.generateContent([prompt, image]);
 
     const response =  result.response.text();
+    if(response.length < maxLength){
+        await interaction.editReply({
+            content: response,
+          });
+    }else{
+        function splitMessage(messageContent, maxLength) {
+            const chunks = [];
+            for (let i = 0; i < messageContent.length; i += maxLength) {
+              chunks.push(messageContent.substring(i, i + maxLength));
+            }
+            return chunks;
+          }
+          const messageChunks = splitMessage(response, maxLength);
+
+    // Send the first chunk as the initial reply
+    const initialReply = await interaction.editReply(messageChunks[0]);
+
+    // Send the remaining chunks as follow-up messages
+    for (let i = 1; i < messageChunks.length; i++) {
+      await interaction.followUp(messageChunks[i]);
+    }
+    }
     
-    await interaction.editReply({
-      content: response,
-    });
   },
 };
